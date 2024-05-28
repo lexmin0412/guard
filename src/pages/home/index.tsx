@@ -1,43 +1,41 @@
-import { useRequest } from 'ahooks'
+import { useOssClient } from '@/hooks';
+import { OssClientInitProps } from '@/utils';
 import { Button, message } from 'antd'
 
 function Home() {
-	const {
-		loading: fetchLoading,
-		runAsync: handleFakeFetch
-	} = useRequest(
-    () => {
-      return fetch(window.location.href).then((res) => {
-        return res.text();
-      });
-    },
-    {
-			manual: true,
-      onSuccess: (res) => {
-        console.log("请求结果", res);
-				message.success('请求成功')
-      },
+  const sourceURL = new URLSearchParams(window.location.search).get('sourceURL')
+
+  const handleOssInitModalConfirm = (values: OssClientInitProps) => {
+    initOSSClient(values);
+    setOssInitModalOpen(false);
+    if (sourceURL) {
+      message.success('授权成功，即将跳转回原站点...', 1.2)
+      setTimeout(() => {
+        window.location.href = sourceURL
+      }, 1200);
+    } else {
+      message.success('授权成功')
     }
-  );
+  };
+
+  const { initOSSClient, setOssInitModalOpen } =
+    useOssClient(handleOssInitModalConfirm);
 
   return (
-    <>
-      <div className="m-3">
-        <Button loading={fetchLoading} onClick={handleFakeFetch}>
-          点击请求
-        </Button>
+    <div className='w-screen h-screen flex items-center justify-center flex-col '>
+      <div className="text-3xl font-bold">
+        Guard
       </div>
-      <div className="m-3">
-        <Button>
-          <a href="/react-template/about">路由切换</a>
-        </Button>
-      </div>
-      <div className="m-3">
-        <Button>
-          <a href="/react-template/antd-demo">AntD Demo</a>
-        </Button>
-      </div>
-    </>
+      <Button type='primary' className='mt-3 bg-theme hover:!bg-theme'
+        onClick={()=>{
+          localStorage.removeItem('oss-config')
+          message.success('重置成功，即将重新初始化', 1.2)
+          setTimeout(() => {
+            window.location.reload()
+          }, 1200);
+        }}
+      >重置</Button>
+    </div>
   );
 }
 

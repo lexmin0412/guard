@@ -1,5 +1,10 @@
+import { tailwindPreset } from 'paintartisan'
+
 /** @type {import('tailwindcss').Config} */
 export default {
+  presets: [
+    tailwindPreset,
+  ],
 	content: [
 		"./index.html",
 		"./src/**/*.{js,ts,jsx,tsx}",
@@ -7,6 +12,8 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    
+  ],
 }
 
