@@ -20,7 +20,9 @@ export default function OAuthGithub() {
         }).then((res)=>{
             console.log('token', res)
             const sourceURL = localStorage.getItem('redirect_uri')
-            console.log('跳回去咯', `${sourceURL}?code=${code}`)
+            const callbackURL = `${sourceURL}?token=${res.data.access_token}`
+            console.log('跳回去咯',callbackURL)
+            window.location.href = callbackURL
         })
     }
 
