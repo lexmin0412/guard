@@ -1,6 +1,6 @@
-# Nextjs Template
+# Guard
 
-基于Next.js v14 App Router 模式构建。
+统一授权中心，支持 Github OAuth、阿里云 STS Token 分发。
 
 ## 技术栈
 

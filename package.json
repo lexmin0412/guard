@@ -1,6 +1,6 @@
 {
-  "name": "nextjs-template",
-  "description": "基于Next.js v14 App Router 模式构建的全栈应用模板。",
+  "name": "guard",
+  "description": "统一授权中心，支持 Github OAuth、阿里云 STS Token 分发。",
   "version": "0.1.0",
   "private": true,
   "engines": {
