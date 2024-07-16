@@ -22,7 +22,6 @@ export async function getTokenByCode(code: string) {
  * 获取环境变量
  */
 export async function getEnvConfig(key: string) {
-	console.log('process.env', process.env)
 	return process.env[key]
 }
 
