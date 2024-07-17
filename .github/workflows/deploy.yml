@@ -1,60 +1,42 @@
-name: Deploy Site to Pages
-
+name: 部署文件到服务器
 on:
   push:
-    branches: [master]
-
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
+    branches:
+      - main
 
 jobs:
-  # Build job
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # Not needed if lastUpdated is not enabled
-      - uses: pnpm/action-setup@v2 # pnpm is optional but recommended, you can also use npm / yarn
-        with:
-          version: 8
-          cache: pnpm
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: pnpm
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-      - name: Install dependencies
-        run: pnpm install
-      - name: Build with Vite
-        run: |
-          pnpm run build
-          cp dist/index.html dist/404.html
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: dist
-
-  # Deployment job
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
     runs-on: ubuntu-latest
-    name: Deploy
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+        fetch-depth: 0
+
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        cache: pnpm
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: pnpm
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Build
+      run: pnpm build
+
+    - name: Deploy to Server
+      uses: lexmin0412/ssh-deploy@master
+      with: # 以下为参数
+        USERNAME: ${{ secrets.DEPLOY_USER }}
+        PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
+        HOST: ${{ secrets.DEPLOY_HOST }}
+        SOURCE: .next
+        TARGET: /cellerchan.top/backend/guard/.next
+        AFTER_COMMAND: 'cd /cellerchan.top && pm2 restart guard'
