@@ -29,7 +29,9 @@ jobs:
       run: pnpm install
 
     - name: Build
-      run: pnpm build
+      run: |
+        pnpm build
+        cat .next/BUILD_ID
 
     - name: Deploy to Server
       uses: lexmin0412/ssh-deploy@master
