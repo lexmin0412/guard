@@ -39,6 +39,6 @@ jobs:
         USERNAME: ${{ secrets.DEPLOY_USER }}
         PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
         HOST: ${{ secrets.DEPLOY_HOST }}
-        SOURCE: .next/,app/
-        TARGET: /cellerchan.top/backend/guard/.next,/cellerchan.top/backend/guard/app
+        SOURCE: .next/
+        TARGET: /cellerchan.top/backend/guard/.next
         AFTER_COMMAND: 'cd /cellerchan.top && pm2 restart guard'
