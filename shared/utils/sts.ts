@@ -40,7 +40,11 @@ class STSClient {
 			// 复制代码运行请自行打印 API 的返回值
 			const res = await client.assumeRoleWithOptions(assumeRoleRequest, runtime);
 			if (res.statusCode === 200) {
-				return res.body.credentials
+				return {
+					bucket: getEnvConfig('OSS_BUCKET'),
+					region: getEnvConfig('OSS_REGION'),
+					...res.body.credentials,
+				}
 			}
 			return null
 		} catch (error: any) {
